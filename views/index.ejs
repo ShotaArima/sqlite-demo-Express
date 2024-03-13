@@ -3,16 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
     </head>
     <body>
         <h1>データベースからの取得</h1>
-        <ul>
-        <% for(let e of dat){ %>
-            <li><%= e.team %></li>
-        <% } %>
-        </ui>
+        <div class="main">
+        <div id="gridTag"></div>
+        <form method="POST" action="/">
+            検索（部分一致）<input type="text" name="word">
+            <input type="submit" value="送信">
+        </form>
         <script>
-            console.log("@ejs");
+            let d = [];
+            <% if (dat && dat.length > 0) { %>
+            //ejsにてオブジェクトデータの配列を展開して、格納
+                <% for(let e of dat){ %>
+                    d.push({id:<%= e.id %>,team:"<%= e.team %>", place:"<%= e.place %>"});
+                <% } %>
+            <% } else { %>
+                <p>No data available</p>
+            <% } %>
+                new gridjs.Grid({
+                data : d,
+            }).render(document.getElementById("gridTag"));
         </script>
     </body>
 </html>
